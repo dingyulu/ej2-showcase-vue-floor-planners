@@ -500,22 +500,18 @@
                   style="background-color: #b5b5b5; margin-bottom: 10px"
                 ></div>
                 <div class="row db-prop-header-text" style="font-weight: bold">
-                  展位图表单
-                  <div
+                  <el-button type="text" @click="changeDisplayBoothChart">
+                    <span v-if="isDisplayBoothChart == false">展位图表单</span>
+                    <span v-else>展位图表单</span>
+                  </el-button>
+                  <!-- <div
                     class="db-prop-separator"
                     style="background-color: #b5b5b5; margin-bottom: 10px"
-                  ></div>
+                  ></div> -->
                   <!-- 展位图表单绑定 -->
-                  <div class="row db-prop-row">
+                  <div class="row db-prop-row" v-show="isDisplayBoothChart">
                     <div class="col-xs-12 db-col-left">
                       <span class="db-prop-text-style">绑定展位图表单</span>
-                      <!-- <ejs-dropdowntree
-                        id="boothChart"
-                        placeholder="请选择绑定表单"
-                        :fields="this.boothChartFields"
-                        :value="['8c08957d50b74cd794c41269']"
-                        v-on:select="boothChart($event)"
-                      ></ejs-dropdowntree> -->
                       <el-select v-model="boothChartIds" ref="selectTree">
                         <el-option
                           v-for="item in this.option"
@@ -531,20 +527,20 @@
                           :data="this.datasssss"
                           :props="treeProps"
                           ref="selecteltree"
-                          @node-click="handleNodeClick"
+                          @node-click="boothChartHandleNodeClick"
                         />
                       </el-select>
                     </div>
                   </div>
                   <!-- 展位图表单字段数据绑定 -->
-                  <div class="row db-prop-row">
+                  <div class="row db-prop-row" v-show="isDisplayBoothChart">
                     <div class="col-xs-12 db-col-left">
                       <span class="db-prop-text-style">绑定展位图内容字段</span>
                       <el-select
                         v-model="contents"
                         clearable
                         placeholder="请选择绑定展位图内容字段"
-                        @clear="clearValueNull()"
+                        @clear="boothChartClearValueNull()"
                       >
                         <el-option
                           v-for="item in this.dropDownList"
@@ -557,14 +553,14 @@
                     </div>
                   </div>
                   <!-- 展位图表单字段数据绑定 -->
-                  <div class="row db-prop-row">
+                  <div class="row db-prop-row" v-show="isDisplayBoothChart">
                     <div class="col-xs-12 db-col-left">
                       <span class="db-prop-text-style">绑定展位图名称字段</span>
                       <el-select
                         v-model="name"
                         clearable
                         placeholder="请选择绑定展位图名称字段"
-                        @clear="clearValueNull()"
+                        @clear="boothChartClearValueNull()"
                       >
                         <el-option
                           v-for="item in this.dropDownList"
@@ -577,30 +573,6 @@
                     </div>
                   </div>
                 </div>
-                <!-- 展位表单绑定 -->
-                <!-- <div
-                  class="db-prop-separator"
-                  style="background-color: #b5b5b5; margin-bottom: 10px"
-                ></div>
-                <div class="row db-prop-header-text" style="font-weight: bold">
-                  展位表单
-                  <div
-                    class="db-prop-separator"
-                    style="background-color: #b5b5b5; margin-bottom: 10px"
-                  ></div> -->
-                <!-- 展位表单绑定 -->
-                <!-- <div class="row db-prop-row">
-                    <div class="col-xs-12 db-col-left">
-                      <span class="db-prop-text-style">绑定展位表单</span>
-                      <ejs-dropdowntree
-                        id="booth"
-                        placeholder="请选择绑定表单"
-                        :fields="this.boothChartFields"
-                        v-on:select="booth($event)"
-                      ></ejs-dropdowntree>
-                    </div>
-                  </div>
-                </div> -->
               </div>
               <div
                 id="nodePropertyContainer"
@@ -955,32 +927,48 @@
                       class="row db-prop-header-text"
                       style="font-weight: bold"
                     >
-                      展位表单
-                      <div
+                      <el-button type="text" @click="changeDisplayBooth">
+                        <span v-if="isDisplayBooth == false">展位表单</span>
+                        <span v-else>展位表单</span>
+                      </el-button>
+
+                      <!-- <div
                         class="db-prop-separator"
                         style="background-color: #b5b5b5; margin-bottom: 10px"
-                      ></div>
+                      ></div> -->
                       <!-- 展位表单绑定 -->
-                      <div class="row db-prop-row">
+                      <div class="row db-prop-row" v-show="isDisplayBooth">
                         <div class="col-xs-12 db-col-left">
                           <span class="db-prop-text-style">绑定展位表单</span>
-                          <ejs-dropdowntree
-                            id="booth"
-                            placeholder="请选择绑定表单"
-                            :fields="this.boothChartFields"
-                            :value="['54e06bce66bb4f8184259445']"
-                            v-on:select="booth($event)"
-                          ></ejs-dropdowntree>
+                          <el-select v-model="boothChartIds" ref="selectTree">
+                            <el-option
+                              v-for="item in this.option"
+                              :key="item.value"
+                              :label="item.fullName"
+                              :value="item.value"
+                              style="display: none"
+                            ></el-option>
+                            <el-tree
+                              :highlight-current="true"
+                              node-key="id"
+                              :current-node-key="this.boothChartId"
+                              :data="this.datasssss"
+                              :props="treeProps"
+                              ref="selecteltree"
+                              @node-click="boothHandleNodeClick"
+                            />
+                          </el-select>
                         </div>
                       </div>
                       <!-- 展位表单字段数据绑定 -->
-                      <div class="row db-prop-row">
+                      <div class="row db-prop-row" v-show="isDisplayBooth">
                         <div class="col-xs-12 db-col-left">
                           <span class="db-prop-text-style">绑定展位号字段</span>
                           <el-select
                             v-model="boothNo"
                             clearable
                             placeholder="请选择绑定展位号字段"
+                            @clear="boothClearValueNull()"
                           >
                             <el-option
                               v-for="item in this.dropDownListBooth"
@@ -994,7 +982,7 @@
                       </div>
 
                       <!-- 展位表单字段数据绑定 -->
-                      <div class="row db-prop-row">
+                      <div class="row db-prop-row" v-show="isDisplayBooth">
                         <div class="col-xs-12 db-col-left">
                           <span class="db-prop-text-style"
                             >绑定展位面积字段</span
@@ -1003,6 +991,7 @@
                             v-model="boothSize"
                             clearable
                             placeholder="请选择绑定展位面积字段"
+                            @clear="boothClearValueNull()"
                           >
                             <el-option
                               v-for="item in this.dropDownListBooth"
@@ -1015,7 +1004,7 @@
                         </div>
                       </div>
                       <!-- 展位表单字段数据绑定 -->
-                      <div class="row db-prop-row">
+                      <div class="row db-prop-row" v-show="isDisplayBooth">
                         <div class="col-xs-12 db-col-left">
                           <span class="db-prop-text-style"
                             >绑定展位长度字段</span
@@ -1024,6 +1013,7 @@
                             v-model="boothHeight"
                             clearable
                             placeholder="请选择绑定展位长度字段"
+                            @clear="boothClearValueNull()"
                           >
                             <el-option
                               v-for="item in this.dropDownListBooth"
@@ -1036,7 +1026,7 @@
                         </div>
                       </div>
                       <!-- 展位表单字段数据绑定 -->
-                      <div class="row db-prop-row">
+                      <div class="row db-prop-row" v-show="isDisplayBooth">
                         <div class="col-xs-12 db-col-left">
                           <span class="db-prop-text-style"
                             >绑定展位宽度字段</span
@@ -1045,6 +1035,7 @@
                             v-model="boothWidth"
                             clearable
                             placeholder="请选择绑定展位宽度字段"
+                            @clear="boothClearValueNull()"
                           >
                             <el-option
                               v-for="item in this.dropDownListBooth"
@@ -1057,7 +1048,7 @@
                         </div>
                       </div>
                       <!-- 展位图单字段数据绑定 -->
-                      <div class="row db-prop-row">
+                      <div class="row db-prop-row" v-show="isDisplayBooth">
                         <div class="col-xs-12 db-col-left">
                           <span class="db-prop-text-style"
                             >绑定展位锁定状态字段</span
@@ -1066,6 +1057,7 @@
                             v-model="boothState"
                             clearable
                             placeholder="请选择绑定展位锁定状态字段"
+                            @clear="boothClearValueNull()"
                           >
                             <el-option
                               v-for="item in this.dropDownListBooth"
@@ -1078,7 +1070,7 @@
                         </div>
                       </div>
                       <!-- 展位表单字段数据绑定 -->
-                      <div class="row db-prop-row">
+                      <div class="row db-prop-row" v-show="isDisplayBooth">
                         <div class="col-xs-12 db-col-left">
                           <span class="db-prop-text-style"
                             >绑定展位关联商品字段</span
@@ -1087,6 +1079,7 @@
                             v-model="boothRelatedProducts"
                             clearable
                             placeholder="请选择绑定展位关联商品字段"
+                            @clear="boothClearValueNull()"
                           >
                             <el-option
                               v-for="item in this.dropDownListBooth"
@@ -1099,7 +1092,7 @@
                         </div>
                       </div>
                       <!-- 展位表单字段数据绑定 -->
-                      <div class="row db-prop-row">
+                      <div class="row db-prop-row" v-show="isDisplayBooth">
                         <div class="col-xs-12 db-col-left">
                           <span class="db-prop-text-style"
                             >绑定展位绑定企业字段</span
@@ -1108,6 +1101,7 @@
                             v-model="boothBindEnterprise"
                             clearable
                             placeholder="请选择绑定展位绑定企业字段"
+                            @clear="boothClearValueNull()"
                           >
                             <el-option
                               v-for="item in this.dropDownListBooth"
@@ -1908,6 +1902,7 @@ export default class User extends Vue {
   created() {
     this.fetchBoothChartList();
     this.fetchBoothCharContentsAndName("8c08957d50b74cd794c41269");
+    this.fetchBoothField("54e06bce66bb4f8184259445");
   }
   public tokenValue: string =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxLGFkbWluIiwidGVuYW50RGJUeXBlIjoiMCIsInVzZXJfbmFtZSI6ImFkbWluYnprIiwiaXNzIjoiYWRtaW4iLCJkYXRhRWFzZVVzZXJJZCI6MSwidXNlcklkIjoiNWNiNmRhZjU2ODJhZDRmODY4ZTUxMWE0IiwiYXV0aG9yaXRpZXMiOlsiYWEiXSwicm9sIjoiUk9MRV9BRE1JTiIsImNsaWVudF9pZCI6ImFkbWluIiwidG9rZW4iOiJzeXNsb2dpbl90b2tlbl82Njg1MTEyY2FiMzQ0OGU4YmQwNjA3MzYiLCJzY29wZSI6WyJhbGwiXSwidGVuYW50SWQiOiJzeXMiLCJleHAiOjE3MTg5MTUzMzEsImp0aSI6IjY0MjZlOWY4LWVjN2UtNDAxNi04NjNiLWU2NjIyNTkwZjIyYyIsInVzZXJuYW1lIjoiYWRtaW4ifQ.N8u5Ro_hgGQi2OB0f0ikPyJJSJeAQdCgxruByKY3HXk";
@@ -4179,6 +4174,10 @@ export default class User extends Vue {
       .then((response) => {
         // 处理后端返回的响应
         console.log("Data added successfully:", response.data);
+        this.$message({
+          message: "保存数据成功!",
+          type: "success",
+        });
       })
       .catch((error) => {
         console.error("Error adding data:", error);
@@ -4941,8 +4940,8 @@ export default class User extends Vue {
 
   //关联展位图
   public boothChartFields: any = {};
-  boothChartId: any = "8c08957d50b74cd794c41269";
-  boothId: any;
+
+  // boothId: any;
   option: any = [];
   datasssss: any = [];
   private fetchBoothChartList() {
@@ -4963,6 +4962,7 @@ export default class User extends Vue {
           text: "fullName",
           child: "children",
         };
+        console.log("展位表绑定：", response.data.data.list);
         this.datasssss = response.data.data.list;
         this.option = [];
         response.data.data.list.forEach((element) => {
@@ -4970,14 +4970,6 @@ export default class User extends Vue {
             fullName: element.fullName,
             value: element.id,
           });
-          // if(element.children){
-          //   element.children.forEach(elements => {
-          //     this.option.push({
-          //       fullName: elements.fullName,
-          //       value: elements.id
-          //     })
-          //   });
-          // }
         });
         console.log("Data added successfully:", response.data.data.list);
       })
@@ -4986,19 +4978,11 @@ export default class User extends Vue {
       });
   }
 
-  //绑定展位表单触发事件
-  public booth(args: DdtSelectEventArgs): void {
-    this.boothId = args.itemData.id;
-    this.fetchBoothField(args);
-    console.log("选择展位", args);
-  }
-
   dropDownListBooth: any[] = [];
   dropDownfieldsBooth = {};
-  private fetchBoothField(args: DdtSelectEventArgs) {
+  private fetchBoothField(id) {
     const token = this.tokenValue;
-    const url =
-      "https://work.baizhanke.com/api/visualdev/Base/" + args.itemData.id;
+    const url = "https://work.baizhanke.com/api/visualdev/Base/" + id;
     axios
       .get(url, {
         headers: {
@@ -5024,24 +5008,6 @@ export default class User extends Vue {
       .catch((error) => {
         console.error("Error adding data:", error);
       });
-  }
-
-  //绑定展位表单字段触发事件
-  boothNo: any = "comInputField101";
-  boothSize: any = "comInputField102";
-  boothHeight: any = "comInputField104";
-  boothWidth: any = "comInputField105";
-  boothState: any = "comInputField103";
-  boothRelatedProducts: any = "comInputField106";
-  boothBindEnterprise: any = "comInputField107";
-
-  //展位图表字段下拉选中值
-  name: any = "comInputField103";
-  contents: any = "comInputField102";
-  
-  //绑定展位图表单触发事件
-  public boothChart(args: DdtSelectEventArgs): void {
-    console.log("选择展位", args);
   }
 
   dropDownList: any[] = [];
@@ -5079,24 +5045,76 @@ export default class User extends Vue {
     label: "fullName",
   };
   selected: any = "";
-  boothChartIds:any  = "测试展位图";
+
+  //展位图表单默认值 & 展位图表单字段默认值
+  boothChartId: any = "8c08957d50b74cd794c41269";
+  boothChartIds: any = "测试展位图";
+
+  //展位图表字段下拉选中值
+  name: any = "comInputField103";
+  contents: any = "comInputField102";
   $refs: any;
-  //当下拉选择表单时，会清空下拉列表中的值
-  clearValueNull(){
+  //展位图表字段当下拉选择表单时，会清空下拉列表中的值
+  boothChartClearValueNull() {
     this.contents = "";
     this.name = "";
   }
-  //下拉选择树选择节点触发事件
-  handleNodeClick(node) {
-    if (!node.hasOwnProperty('children')) {
+  //下拉选择树展位图表选择节点触发事件
+  boothChartHandleNodeClick(node) {
+    if (!node.hasOwnProperty("children")) {
       console.log(node);
-      this.clearValueNull();
+      this.boothChartClearValueNull();
       this.boothChartIds = node.fullName;
       this.boothChartId = node.id;
       this.fetchBoothCharContentsAndName(node.id);
       this.$refs.selectTree.blur();
     }
+  }
 
+  //展位表单默认值 & 展位表单字段默认值
+  boothId: any = "54e06bce66bb4f8184259445";
+  boothIds: any = "测试展位";
+
+  //绑定展位表单字段触发事件
+  boothNo: any = "comInputField101";
+  boothSize: any = "comInputField102";
+  boothHeight: any = "comInputField104";
+  boothWidth: any = "comInputField105";
+  boothState: any = "comInputField103";
+  boothRelatedProducts: any = "comInputField106";
+  boothBindEnterprise: any = "comInputField107";
+
+  //下拉选择树展位表选择节点触发事件
+  boothHandleNodeClick(node) {
+    if (!node.hasOwnProperty("children")) {
+      console.log(node);
+      this.boothClearValueNull();
+      this.boothIds = node.fullName;
+      this.boothId = node.id;
+      this.fetchBoothField(node.id);
+      this.$refs.selectTree.blur();
+    }
+  }
+
+  //展位表字段当下拉选择表单时，会清空下拉列表中的值
+  boothClearValueNull() {
+    this.boothNo = "";
+    this.boothSize = "";
+    this.boothHeight = "";
+    this.boothWidth = "";
+    this.boothState = "";
+    this.boothRelatedProducts = "";
+    this.boothBindEnterprise = "";
+  }
+  //展位图隐藏
+  isDisplayBoothChart = false;
+  changeDisplayBoothChart() {
+    this.isDisplayBoothChart = !this.isDisplayBoothChart;
+  }
+  //展位隐藏
+  isDisplayBooth = false;
+  changeDisplayBooth() {
+    this.isDisplayBooth = !this.isDisplayBooth;
   }
 }
 </script>
